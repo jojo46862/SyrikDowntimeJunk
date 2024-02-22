@@ -174,7 +174,7 @@ def pitFighting(name: str, days: int, goldBet: int):
     gold = goldBet
     bank = 0
     
-    while (loops > 0 and gold>100):
+    while (loops > 0 and gold>99):
         whatLostLimb = loseALimb()
         complicationOdds = 5
 
@@ -223,14 +223,10 @@ def pitFighting(name: str, days: int, goldBet: int):
                 else:
                     print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and avoided a complication.")
         if(gold > 5000):
-            bank = gold-5000
+            bank += gold-5000
             gold = 5000
-        gold = gold+bank
-    print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold) + " gold from their " + str(incrementor) + " pit fight(s) for a net total change of " + str(gold-goldBet) + " gold.")
-            
-
-
         
+        print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold+bank) + " gold from their " + str(incrementor) + " pit fight(s) for a net total change of " + str(gold+bank-goldBet) + " gold.")
 
 
 
