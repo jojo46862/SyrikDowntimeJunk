@@ -138,7 +138,7 @@ def guarding(name: str, days: int, level: int, passiveTotal: int, baseDC: int, p
 #Needs an event handler
 #def infiltrate()
 
-#instert my pit fighting calculator here
+#goldBet and days are inputs, nanme can be taken from sheet. Goldbet can be verified to make sure they do have that gold
 def loseALimb():
     random.seed(datetime.now().timestamp())
     limbRoll = random.randint(1,6)
@@ -174,7 +174,7 @@ def pitFighting(name: str, days: int, goldBet: int):
     gold = goldBet
     bank = 0
     
-    while (loops > 0 or gold>100):
+    while (loops > 0 and gold>100):
         whatLostLimb = loseALimb()
         complicationOdds = 5
 
@@ -186,7 +186,6 @@ def pitFighting(name: str, days: int, goldBet: int):
         
         print(name + " has the following DCs for pit fighting #" + str(incrementor))
         
-
         print("Acrobatics DC: " + str(acroDC))
         print("Athletics DC: " + str(athlDC))
         print("Tactics DC: " + str(tactDC))
@@ -223,15 +222,12 @@ def pitFighting(name: str, days: int, goldBet: int):
                     print(complicationList[random.randint(12,12)-1])
                 else:
                     print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and avoided a complication.")
-                if(gold > 5000):
-                    bank = gold-5000
-                    gold = 5000
+        if(gold > 5000):
+            bank = gold-5000
+            gold = 5000
         gold = gold+bank
-        print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold) + " gold from their " + str(incrementor) + " pit fight(s) for a net total change of " + str(gold-goldBet) + " gold.")
+    print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold) + " gold from their " + str(incrementor) + " pit fight(s) for a net total change of " + str(gold-goldBet) + " gold.")
             
-
-
-
 
 
         
