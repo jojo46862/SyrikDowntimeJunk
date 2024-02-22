@@ -8,7 +8,7 @@ from datetime import datetime
 
 #def crafting():
 
-#copy pit fighting and rework it
+# has days and gold bet as input, name can be taken from sheet, and goldbet can be verified on the sheet
 def gambling(name: str, days: int, goldBet: int):
     complicationList = ["You are accused of cheating. You decide whether you actually did cheat or were framed.*",
                         "The town guards raid the gambling hall. See Event Handler to determine if you avoid capture, and thus Jail time. If gambling is legal in your region. This event may be a different organizational raid, such as a rival guild.*",
@@ -89,11 +89,34 @@ def gambling(name: str, days: int, goldBet: int):
 
 #def practicingAProfession():
 
-#def recuperating():
+#takes days as input, name and chaMod can be taken from sheet
+def recuperating(name: str, days: int, chaMod: int):
+    weekly = ""
+    if(days > 6):
+        weekly = " and recovers week long refreash features"
+    print(name + " recovers expended Long Rest features" + weekly + ".")
+    if(days > 2):
+        print(name + " gains advantage on saving throws to recover from long-acting diseases and poisions for one week, including the days spend relaxing. They can also end one effect that keeps them from regaining hit points, or can restore one ability score that has been reduce to less than its normal value. This does not work on magical effects that have ongoing durations or have a specific listed means to recover.")
+        print(name + " reduces any moderate or lover corruption they are suffering from by 1.") #if the intention is to have 6 days reduce it by more, change 1 to [" + math.floor(days/3) + "]
+    if(days > 5):
+        print(name + " reduces sanity damage by " + str(chaMod) + ".")
+
 
 #def researchingLore():
 
-#def revelry():
+#This one seems to be missing a good amount of information from the DTD page. Should be updated.
+def revelry(name: str, days: int, lifeSytleCost: int, chaMod: int, conMod: int):
+    goldCost = days*lifeSytleCost
+    inspirationGain = min(3, math.floor(days/2))
+    sanityReduction = math.floor(days/7)*chaMod
+    conCheckDC = 8 + math.floor(days/2)
+
+    conCheckRoll = random.randint(1,20)
+    if(conCheckRoll+conMod < conCheckDC):
+        print(name + " rolled a " + str(conCheckRoll+conMod) + "=" + str(conCheckRoll) + "+" +str(conMod) + " against a DC" + str(conCheckDC) + " and [ROLL ON REVELRY TABLE].")
+    else:
+        print(name + " rolled a " + str(conCheckRoll+conMod) + "=" + str(conCheckRoll) + "+" +str(conMod) + " against a DC" + str(conCheckDC) + " and is chilling after their revelry.")
+    print(name + " must spend " +  str(goldCost) + " gold to gain " + str(inspirationGain) + " inspiration(s) upto their cap and recudes any sanity damage they are suffering from by " + str(sanityReduction) + ".")
 
 #def shopping():
 
@@ -207,7 +230,7 @@ def guarding(name: str, days: int, level: int, passiveTotal: int, baseDC: int, p
 #Needs an event handler
 #def infiltrate()
 
-#goldBet and days are inputs, nanme can be taken from sheet. Goldbet can be verified to make sure they do have that gold
+#goldBet and days are inputs, nanme can be taken from sheet. Goldbet can be verified to make sure they do have that gold. Lose a limb a sub function of Pit Fighting for the hopefully rare limb loss
 def loseALimb():
     random.seed(datetime.now().timestamp())
     limbRoll = random.randint(1,6)
@@ -361,5 +384,7 @@ def schemeForAnAdventure(name: str, days: int, missionName: str, researcher: boo
 # performingSacredRites("Quinn", 21)
 # schemeForAnAdventure("Kei", 15, "The Blight Bargain", True)
 # therapy("Gagun", 4, False, 4, 2)   
-pitFighting("Quinn", 7, 2500)
+# pitFighting("Quinn", 7, 2500)
 # gambling("Quinn", 28, 1000)
+# revelry("Quinn", 14, 3, 1, 3)
+# recuperating("Quinn", 6, 2)
