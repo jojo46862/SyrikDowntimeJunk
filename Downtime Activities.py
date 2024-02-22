@@ -9,7 +9,77 @@ from datetime import datetime
 #def crafting():
 
 #copy pit fighting and rework it
-#def gambling():
+def gambling(name: str, days: int, goldBet: int):
+    complicationList = ["You are accused of cheating. You decide whether you actually did cheat or were framed.*",
+                        "The town guards raid the gambling hall. See Event Handler to determine if you avoid capture, and thus Jail time. If gambling is legal in your region. This event may be a different organizational raid, such as a rival guild.*",
+                        "A noble in town loses badly to you and loudly vows to get revenge.*",
+                        "You won a sum from a low-ranking member of a thieves’ guild, and the guild wants its money back.*",
+                        "A local crime boss insists you start frequenting the boss’s gambling parlor and no others.",
+                        "You accrue a debt with the gambling organization, equal to your original bet.*",
+                        "You accrue a debt with the gambling organization, equal to double your original bet.*",
+                        "A high-stakes gambler comes to town and insists that you take part in a game."]
+
+    loops = math.floor(days/7)
+    incrementor = 0
+    gold = goldBet
+    bank = 0
+    
+    while (loops > 0 and gold>9):
+        complicationOdds = 5
+
+        insiDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
+        deceDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
+        intiDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
+        
+        incrementor += 1
+        
+        print(name + " has the following DCs for gambling #" + str(incrementor))
+        
+        print("Insight DC: " + str(insiDC))
+        print("Deception DC: " + str(deceDC))
+        print("Intimidation DC: " + str(intiDC))
+        verification = False
+        while(not verification):
+            verification = True
+            sucesses = input("How many of the DCs did " + name + " meet or beat? ")
+            
+            try:
+                int(sucesses)
+            except:
+                print("Bad input. Try again please :3")
+                verification = False
+            else:
+                sucesses = int(sucesses)
+                if(sucesses == 3):
+                    gold = gold*2
+                elif(sucesses == 2):
+                    gold = gold*1.5
+                    complicationOdds += 5
+                elif(sucesses == 1):
+                    gold = gold*0.5
+                    complicationOdds += 10
+                elif(sucesses == 0):
+                    gold = 0
+                    complicationOdds += 20
+                else:
+                    print("Bad input. Try again please :3")
+                    verification = False
+                loops -= 1
+                complicationRoll = random.randint(1,100)
+                if(complicationRoll < complicationOdds):
+                    print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and A complication has occured.")
+                    whichComplicationEvent = random.randint(1,8)-1
+                    print(complicationList[whichComplicationEvent])
+                    if(not (whichComplicationEvent == 4 or whichComplicationEvent == 7)):
+                        print("* = (This may involve a rival).")
+                else:
+                    print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and avoided a complication.")
+        if(gold > 1000):
+            bank += gold-1000
+            gold = 1000
+        
+        print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold+bank) + " gold from their " + str(incrementor) + " gambling(s) for a net total change of " + str(gold+bank-goldBet) + " gold.")
+
 
 #def gatherInformation():
 
@@ -26,7 +96,6 @@ from datetime import datetime
 #def revelry():
 
 #def shopping():
-
 
 def therapy(name: str, days: int, therapistContact: bool, lifestyleTravelCost: int, medicineModifier: int):
     sanityReduction = max(4, medicineModifier)
@@ -173,6 +242,10 @@ def pitFighting(name: str, days: int, goldBet: int):
     incrementor = 0
     gold = goldBet
     bank = 0
+
+    xpTicks = 6*days
+    influenceRolls = 0
+    
     
     while (loops > 0 and gold>99):
         whatLostLimb = loseALimb()
@@ -203,15 +276,18 @@ def pitFighting(name: str, days: int, goldBet: int):
                 sucesses = int(sucesses)
                 if(sucesses == 3):
                     gold = gold*2
+                    influenceRolls += 3
                 elif(sucesses == 2):
                     gold = gold*1.5
                     complicationOdds += 5
+                    influenceRolls += 2
                 elif(sucesses == 1):
                     gold = gold*0.5
                     complicationOdds += 10
+                    influenceRolls += 1
                 elif(sucesses == 0):
                     gold = 0
-                    complicationOdds += 200
+                    complicationOdds += 20
                 else:
                     print("Bad input. Try again please :3")
                     verification = False
@@ -219,15 +295,28 @@ def pitFighting(name: str, days: int, goldBet: int):
                 complicationRoll = random.randint(1,100)
                 if(complicationRoll < complicationOdds):
                     print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and A complication has occured.")
-                    print(complicationList[random.randint(12,12)-1])
+                    whichComplicationEvent = random.randint(1,12)-1
+                    print(complicationList[whichComplicationEvent])
+                    if(whichComplicationEvent < 7 or whichComplicationEvent == 8):
+                        print("* = (This may involve a rival).")
                 else:
                     print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and avoided a complication.")
         if(gold > 5000):
             bank += gold-5000
             gold = 5000
+
+        
         
         print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold+bank) + " gold from their " + str(incrementor) + " pit fight(s) for a net total change of " + str(gold+bank-goldBet) + " gold.")
-
+    incrementor = 0
+    influenceGainTotal = 0
+    while (incrementor < influenceRolls):
+        influenceGain = random.randint(1,4)
+        influenceGainTotal += influenceGain
+        print("Influence roll #" + str(incrementor) + ": " + str(influenceGain))
+        incrementor += 1
+    
+    print(name + " has also earned " + str(xpTicks) + " xp ticks and " + str(influenceGainTotal) + " (" + str(influenceRolls)+"d4) influence in the pit fighting organization and the city")
 
 
 # days is the only input, name can be taken from sheet. Inspiration cap might be also grabbable along with lifestyle reduction stuff
@@ -271,6 +360,6 @@ def schemeForAnAdventure(name: str, days: int, missionName: str, researcher: boo
 # guarding("Quinn", 7, 5, 10, 4, 6)
 # performingSacredRites("Quinn", 21)
 # schemeForAnAdventure("Kei", 15, "The Blight Bargain", True)
-# therapy("Gagun", 4, False, 4, 2)
-    
-pitFighting("Quinn", 77, 100)
+# therapy("Gagun", 4, False, 4, 2)   
+pitFighting("Quinn", 7, 2500)
+# gambling("Quinn", 28, 1000)
