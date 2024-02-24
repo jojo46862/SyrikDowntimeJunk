@@ -371,7 +371,10 @@ def schemeForAnAdventure(name: str, days: int, missionName: str, researcher: boo
 #def sowingRumors():
     
 #Technically only the taming side, still needs tork on the training stuff in a different function
-def tameACreature(name: str, days: int, creatureHDQuanitity: int, creatureStrScore: int, creatureIntScore: int, creatureChaScore: int, creatureAlignment: str, creatureCR: int, docile: bool, advanced: bool, playerAlignment: str, tamerToolLevel: str, tamersToolMod: int, playerAnimalHandling: int):
+# Need to be input: days, creatureHDQuanitity, creatureStrScore, creatureIntScore, creatureChaScore, creatureAlignment, creatureCR, docile, advanced
+# Can be grabbed from the sheet: name, playerAlignment, tamerToolLevel, tamersToolMod, playerAnimalHandling
+def tameACreature(name: str, days: int, creatureHDQuanitity: int, creatureStrScore: int, creatureIntScore: int, creatureChaScore: int, 
+                  creatureAlignment: str, creatureCR: int, docile: bool, advanced: bool, playerAlignment: str, tamerToolLevel: str, tamersToolMod: int, playerAnimalHandling: int):
     
     # Having a while(True) lets it break at different points if the player cannot do something for a reason.
     while(True):
@@ -470,7 +473,7 @@ def tameACreature(name: str, days: int, creatureHDQuanitity: int, creatureStrSco
             print(name + " sucessfully tames the creature.")
             break
 
-
+#def trainACreature()
         
 
         
