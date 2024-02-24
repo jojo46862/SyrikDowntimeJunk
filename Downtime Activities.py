@@ -370,9 +370,112 @@ def schemeForAnAdventure(name: str, days: int, missionName: str, researcher: boo
 # another one on the docket to reduce the effects of
 #def sowingRumors():
     
-
-#def tameACreature():
+#Technically only the taming side, still needs tork on the training stuff in a different function
+def tameACreature(name: str, days: int, creatureHDQuanitity: int, creatureStrScore: int, creatureIntScore: int, creatureChaScore: int, creatureAlignment: str, creatureCR: int, docile: bool, advanced: bool, playerAlignment: str, tamerToolLevel: str, tamersToolMod: int, playerAnimalHandling: int):
     
+    # Having a while(True) lets it break at different points if the player cannot do something for a reason.
+    while(True):
+        # Taming DC Calcuation
+        chaAdd = 0.0
+        intAdd = 0.0
+        strAdd = 0.0
+        alignmentSteps = 0
+        verification = True
+        if(creatureAlignment[0] != 'L' or creatureAlignment[0] != 'N' or creatureAlignment[0] != 'C'):
+            verification = False
+        if(creatureAlignment[1] != 'G' or creatureAlignment[1] != 'N' or creatureAlignment[1] != 'E'):
+            verification = False
+        
+
+        if(creatureAlignment != "TN" and verification):
+            if(playerAlignment[0] == 'L'):
+                if(creatureAlignment[0] == 'N'):
+                    alignmentSteps += 1
+                elif(creatureAlignment[0] == 'C'):
+                    alignmentSteps += 2
+            elif(playerAlignment[0] == 'N'):
+                if(creatureAlignment[0] != 'N'):
+                    alignmentSteps += 1
+            else:
+                if(creatureAlignment[1] == 'N'):
+                    alignmentSteps += 1
+                elif(creatureAlignment[1] == 'L'):
+                    alignmentSteps += 2
+
+            if(playerAlignment[1] == 'G'):
+                if(creatureAlignment[1] == 'N'):
+                    alignmentSteps += 1
+                elif(creatureAlignment[1] == 'E'):
+                    alignmentSteps += 2
+            elif(playerAlignment[1] == 'N'):
+                if(creatureAlignment[1] != 'N'):
+                    alignmentSteps += 1
+            else:
+                if(creatureAlignment[1] == 'N'):
+                    alignmentSteps += 1
+                elif(creatureAlignment[1] == 'G'):
+                    alignmentSteps += 2
+            
+
+        if(docile):
+            chaAdd = creatureChaScore*0.5
+        else:
+            chaAdd = creatureChaScore*1.5
+
+
+        if(creatureIntScore < 6):
+            intAdd = (6-creatureIntScore)*2
+        else:
+            intAdd = (math.floor((creatureIntScore-10)/2))
+
+
+        strAdd = creatureStrScore/5
+
+
+        if(advanced):
+            bonusAdd = 4 + float(alignmentSteps)*2
+        else:
+            bonusAdd = float(alignmentSteps)*2
+
+
+        trainingDC = math.floor(10 + float(creatureCR) + chaAdd + intAdd + strAdd + bonusAdd)
+
+        # Can they tame it
+        maxTamersOrAH = max(tamersToolMod, playerAnimalHandling)
+        tamingScore = 10 + tamersToolMod + playerAnimalHandling
+        canTheyTameIt = False
+        
+        if(tamingScore+1>trainingDC):
+            canTheyTameIt = True
+        else:
+            print(name + " has a taming score of " + str(tamingScore) + " but they need a taming score of " + str(trainingDC) + " to tame this creature.")
+            break
+     
+        
+        #Dowmtime Days Needed
+        daysNeededMod = 10
+        
+        if(tamerToolLevel == "P"):
+            daysNeededMod = 9
+        elif(tamerToolLevel == "E"):
+            daysNeededMod = 8
+        elif(tamerToolLevel == "M"):
+            daysNeededMod = 6
+
+        daysNeeded = creatureHDQuanitity*daysNeededMod
+        if(daysNeeded > days):
+            print(name + " needs to spend " + str(daysNeeded) + " days to tame this creature. They have only spent " + str(days) + " days.")
+            break
+        else:
+            print(name + " sucessfully tames the creature.")
+            break
+
+
+        
+
+        
+
+
 
 #def training():
 
@@ -388,3 +491,4 @@ def schemeForAnAdventure(name: str, days: int, missionName: str, researcher: boo
 # gambling("Quinn", 28, 1000)
 # revelry("Quinn", 14, 3, 1, 3)
 # recuperating("Quinn", 6, 2)
+# tameACreature("Quinn", 72, 12, 26, 17, 12, "NE", 15, False, True, "NE", "M", 22, 23)
