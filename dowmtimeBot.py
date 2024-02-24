@@ -5,6 +5,11 @@ import discord
 import os # default module
 import downtimeActivities as downtime
 
+#Gotta protect my token
+import dotenv
+dotenv.load_dotenv()
+token = str(os.getenv("TOKEN"))
+
 bot = discord.Bot()
 
 
@@ -18,4 +23,4 @@ async def hello(ctx):
     await ctx.respond("Hey!")
 
 
-bot.run("MTIxMDc0NTI3ODg0NDUwMjA2Ng.GTBFtK.pE09mXlHs51TJWF5hxXL3Wg5msPmGAScgXadyE") # run the bot with the token
+bot.run(token) # run the bot with the token
