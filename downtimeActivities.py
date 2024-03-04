@@ -142,8 +142,8 @@ def adventure(name: str, days: int, level: int, region :str, settlement: str):
     goldGain = 0
     influenceGain = 0
     tickGain = 6*days
-    hirelingTier = 0
     tierOfPlay = 0
+    textOutput = ""
 
     if (level>16):
         hirelingTier = 5
@@ -179,11 +179,14 @@ def adventure(name: str, days: int, level: int, region :str, settlement: str):
     while(influenceCycles >0):
         influenceRoll = random.randint(1,4)
         incrementor += 1
-        print("Influence roll #" + str(incrementor) + ": " + str(influenceRoll))
+        textOutput = textOutput + ("Influence roll #" + str(incrementor) + ": " + str(influenceRoll)) + "\n"
         influenceGain += influenceRoll
         influenceCycles -= 1
     
-    print(name + " spent " + str(days) + " days adventuring in " + settlement + ", " + region + " and has gained " + str(tickGain) + " xp ticks, " + str(goldGain) + " gold, and " + str(influenceGain) + " influence in both locations.")
+    textOutput = textOutput + "-------------------\n"
+    
+    textOutput = textOutput + (name + " spent " + str(days) + " days adventuring in " + settlement + ", " + region + " and has gained " + str(tickGain) + " xp ticks, " + str(goldGain) + " gold, and " + str(influenceGain) + " influence in both locations.")
+    return textOutput
 
 # days needs to be an input, rest can be grabbed from sheet
 # this is one of the ones that we are going to want to maybe not let it infinitely scale with days DC 23 with 10 days and a really basic deception is quite a lot
@@ -191,7 +194,7 @@ def alibi(name: str, days: int, deception: int):
     investigationDC = 10 + deception + (4*math.floor(days/5))
     additionalCreatures = 5+days
 
-    print(name + " creates an alibi for themselves and upto " + str(additionalCreatures) + " additional creatures. The DC to see through this alibi is " + str(investigationDC) + ".")
+    return(name + " creates an alibi for themselves and upto " + str(additionalCreatures) + " additional creatures. The DC to see through this alibi is " + str(investigationDC) + ".")
 
 # has too much staff stuff to be automated full, will return to see how much can be manually input
 #def blackmail(name: str, target: str, days: int, targetInfluenceSpending: int, playerInfluenceSpending: int):
@@ -230,7 +233,7 @@ def guarding(name: str, days: int, level: int, passiveTotal: int, baseDC: int, p
 #Needs an event handler
 #def infiltrate()
 
-#goldBet and days are inputs, nanme can be taken from sheet. Goldbet can be verified to make sure they do have that gold. Lose a limb a sub function of Pit Fighting for the hopefully rare limb loss
+#goldBet and days are inputs, name can be taken from sheet. Goldbet can be verified to make sure they do have that gold. Lose a limb a sub function of Pit Fighting for the hopefully rare limb loss
 def loseALimb():
     random.seed(datetime.now().timestamp())
     limbRoll = random.randint(1,6)
@@ -245,39 +248,18 @@ def loseALimb():
 
     return(theLostLimb)
 
-def pitFighting(name: str, days: int, goldBet: int):
+def pitFighting():
 
-    whatLostLimb = loseALimb()
-    complicationList = ["You are accused of cheating. You decide whether you actually did cheat or were framed.*",
-                        "The town guards raid the fighting den. See Event Handler to determine if you avoid capture, and thus Jail time. If pit fighting is legal in your region. This event may be a different organizational raid, such as a rival guild, or is simply a reroll.*",
-                        "A noble in town loses badly to you and loudly vows to get revenge.*",
-                        "You won a sum from a low-ranking member of a thieves’ guild, and the guild wants its money back.*",
-                        "A local crime boss insists you start frequenting the boss’s fighting pits and no others.",
-                        "You accrue a debt with the pit fighting organization, equal to your original bet.*",
-                        "You accrue a debt with the pit fighting organization, equal to double your original bet.*",
-                        "A high-stakes pitmaster comes to town and insists that you take part in a game.",
-                        "The crowd loses favor with you. You lose " + str((random.randint(1,6))*5) + "(1d6x5)Influence with the Pit Fighting organization and the city it took place in.*",
-                        "You are injured in your fight, and lose 3 DTDs as you must recover from your injuries. These DTDs are lost as soon as you are able to lose them.",
-                        "You are injured in your fight, and suffer a level of Exhaustion until you spend 6 DTDs Recuperating. You must do this for every level of Exhaustion gained in this way.",
-                        whatLostLimb]
-
-    loops = math.floor(days/7)
-    incrementor = 0
-    gold = goldBet
-    bank = 0
-
-    xpTicks = 6*days
-    influenceRolls = 0
     
-    
+    acroDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
+    athlDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
+    tactDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
+        
+    '''
     while (loops > 0 and gold>99):
         whatLostLimb = loseALimb()
-        complicationOdds = 5
-
-        acroDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
-        athlDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
-        tactDC = random.randint(1,10) + random.randint(1,10) + random.randint(1,10) + 5
         
+
         incrementor += 1
         
         print(name + " has the following DCs for pit fighting #" + str(incrementor))
@@ -297,49 +279,78 @@ def pitFighting(name: str, days: int, goldBet: int):
                 verification = False
             else:
                 sucesses = int(sucesses)
-                if(sucesses == 3):
-                    gold = gold*2
-                    influenceRolls += 3
-                elif(sucesses == 2):
-                    gold = gold*1.5
-                    complicationOdds += 5
-                    influenceRolls += 2
-                elif(sucesses == 1):
-                    gold = gold*0.5
-                    complicationOdds += 10
-                    influenceRolls += 1
-                elif(sucesses == 0):
-                    gold = 0
-                    complicationOdds += 20
-                else:
-                    print("Bad input. Try again please :3")
-                    verification = False
-                loops -= 1
-                complicationRoll = random.randint(1,100)
-                if(complicationRoll < complicationOdds):
-                    print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and A complication has occured.")
-                    whichComplicationEvent = random.randint(1,12)-1
-                    print(complicationList[whichComplicationEvent])
-                    if(whichComplicationEvent < 7 or whichComplicationEvent == 8):
-                        print("* = (This may involve a rival).")
-                else:
-                    print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and avoided a complication.")
-        if(gold > 5000):
-            bank += gold-5000
-            gold = 5000
+                
+    '''
+    return acroDC, athlDC, tactDC
+
+def pitFightingResults(name: str, days: int, goldBet: int, sucesses: int):
+    
+    complicationOdds = 5
+    whatLostLimb = loseALimb()
+    complicationList = ["You are accused of cheating. You decide whether you actually did cheat or were framed.*",
+                        "The town guards raid the fighting den. See Event Handler to determine if you avoid capture, and thus Jail time. If pit fighting is legal in your region. This event may be a different organizational raid, such as a rival guild, or is simply a reroll.*",
+                        "A noble in town loses badly to you and loudly vows to get revenge.*",
+                        "You won a sum from a low-ranking member of a thieves’ guild, and the guild wants its money back.*",
+                        "A local crime boss insists you start frequenting the boss’s fighting pits and no others.",
+                        "You accrue a debt with the pit fighting organization, equal to your original bet.*",
+                        "You accrue a debt with the pit fighting organization, equal to double your original bet.*",
+                        "A high-stakes pitmaster comes to town and insists that you take part in a game.",
+                        "The crowd loses favor with you. You lose " + str((random.randint(1,6))*5) + " (1d6x5)Influence with the Pit Fighting organization and the city it took place in.*",
+                        "You are injured in your fight, and lose 3 DTDs as you must recover from your injuries. These DTDs are lost as soon as you are able to lose them.",
+                        "You are injured in your fight, and suffer a level of Exhaustion until you spend 6 DTDs Recuperating. You must do this for every level of Exhaustion gained in this way.",
+                        whatLostLimb]
+
+    loops = math.floor(days/7)
+    textOutput = ""
+    incrementor = 0
+    gold = goldBet
+
+    xpTicks = 6*days
+    influenceRolls = 0
+    if(sucesses == 3):
+        gold = gold*2
+        influenceRolls += 3
+    elif(sucesses == 2):
+        gold = gold*1.5
+        complicationOdds += 5
+        influenceRolls += 2
+    elif(sucesses == 1):
+        gold = gold*0.5
+        complicationOdds += 10
+        influenceRolls += 1
+    elif(sucesses == 0):
+        gold = 0
+        complicationOdds += 20
+    complicationRoll = random.randint(1,100)
+    if(complicationRoll < complicationOdds):
+        #print(name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and A complication has occured.")
+        textOutput = textOutput + (name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and a complication has occured.") + "\n"
+        whichComplicationEvent = random.randint(1,12)-1
+        textOutput = textOutput + (complicationList[whichComplicationEvent]) + "\n"
+        if(whichComplicationEvent < 7 or whichComplicationEvent == 8):
+            textOutput = textOutput + ("\* = (This may involve a rival).") + "\n"
+    else:
+        textOutput = textOutput + (name + " rolled a " + str(complicationRoll) + " on the d100 vs a complication chance of "+ str(complicationOdds) + "% and avoided a complication.") + "\n"
+        
 
         
         
-        print(name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold+bank) + " gold from their " + str(incrementor) + " pit fight(s) for a net total change of " + str(gold+bank-goldBet) + " gold.")
+    textOutput = textOutput + (name + "'s initial bet of " + str(goldBet) + " has returned them " + str(gold) + " gold from their pit fight for a net total change of " + str(gold-goldBet) + " gold.") + "\n"
     incrementor = 0
     influenceGainTotal = 0
+    textOutput = textOutput + "-------------------\n"
+    if(influenceRolls == 0):
+        textOutput = textOutput + "No influence gain.\n"
     while (incrementor < influenceRolls):
         influenceGain = random.randint(1,4)
         influenceGainTotal += influenceGain
-        print("Influence roll #" + str(incrementor) + ": " + str(influenceGain))
+        textOutput = textOutput + ("Influence roll #" + str(incrementor+1) + ": " + str(influenceGain)) + "\n"
         incrementor += 1
+    textOutput = textOutput + "-------------------\n"
     
-    print(name + " has also earned " + str(xpTicks) + " xp ticks and " + str(influenceGainTotal) + " (" + str(influenceRolls)+"d4) influence in the pit fighting organization and the city")
+    textOutput = textOutput + (name + " has also earned " + str(xpTicks) + " xp ticks and " + str(influenceGainTotal) + " (" + str(influenceRolls)+"d4) influence in the pit fighting organization and the city") + "\n"
+    
+    return textOutput
 
 
 # days is the only input, name can be taken from sheet. Inspiration cap might be also grabbable along with lifestyle reduction stuff
